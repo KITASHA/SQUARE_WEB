@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import admin from "./admin.js";
+import gigsAdmin from "./admin-gigs.js";
 import { bandCard, escapeHtml, gigCard, layout, safeExternalUrl } from "./html.js";
 import { aboutPage, homePage, musicSquarePage, regularActivityPage, starterBandPage, workshopPage } from "./pages.js";
 import { clearLoginFailures, clearSessionCookie, createCsrfCookie, createSessionCookie, loginAllowed, recordLoginFailure, verifyCsrf, verifyPassword } from "./auth.js";
@@ -15,9 +16,12 @@ app.use("*", async (c, next) => {
 });
 
 app.route("/admin", admin);
+app.route("/admin/gigs", gigsAdmin);
 
 app.get("/bands/new", (c) => c.redirect("/admin/bands/new", 302));
 app.get("/bands/:slug/edit", (c) => c.redirect(`/admin/bands/${encodeURIComponent(c.req.param("slug"))}/edit`, 302));
+app.get("/gigs/new", (c) => c.redirect("/admin/gigs/new", 302));
+app.get("/gigs/:id/edit", (c) => c.redirect(`/admin/gigs/${encodeURIComponent(c.req.param("id"))}/edit`, 302));
 
 app.get("/", (c) => c.html(layout({
   title: "岡山アカペラサークル",
