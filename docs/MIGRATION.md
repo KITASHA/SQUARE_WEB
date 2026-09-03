@@ -38,10 +38,10 @@
 - [ ] Copy exact HTML, CSS, wording and images from Rails
 - [ ] Export MySQL records and preserve band slugs
 - [ ] Upload selected existing images to R2
-- [ ] Implement shared-password authentication
-- [ ] Implement authenticated band and gig CRUD
-- [ ] Implement CSRF protection and login rate limiting
-- [ ] Add upload type, signature and size validation
+- [x] Implement shared-password authentication
+- [x] Implement authenticated band and gig CRUD
+- [x] Implement CSRF protection and login rate limiting
+- [x] Add upload type and size validation (file-signature validation remains)
 - [ ] Create D1 database and R2 bucket
 - [ ] Replace the D1 placeholder ID in wrangler.jsonc
 - [ ] Configure Cloudflare and GitHub secrets
