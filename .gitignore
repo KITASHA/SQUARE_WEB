@@ -4,3 +4,6 @@ node_modules/
 .env
 .DS_Store
 *.log
+migration/mysql-export.json
+migration/d1-import.sql
+migration/image-manifest.json
