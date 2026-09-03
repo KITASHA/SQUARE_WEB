@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "square-web",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-03",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/", "/bands/*", "/gigs/*", "/login", "/logout", "/homes/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "square-web",
+      "database_id": "REPLACE_AFTER_D1_CREATION",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "IMAGES",
+      "bucket_name": "square-web-images"
+    }
+  ]
+}
