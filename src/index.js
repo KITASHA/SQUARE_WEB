@@ -3,7 +3,7 @@ import admin from "./admin.js";
 import gigsAdmin from "./admin-gigs.js";
 import { bandCard, escapeHtml, gigCard, layout, safeExternalUrl } from "./html.js";
 import { aboutPage, homePage, musicSquarePage, regularActivityPage, starterBandPage, workshopPage } from "./pages.js";
-import { clearLoginFailures, clearSessionCookie, createCsrfCookie, createSessionCookie, loginAllowed, recordLoginFailure, verifyCsrf, verifyPassword } from "./auth.js";
+import { clearLoginFailures, clearSessionCookie, createCsrfCookie, createSessionCookie, isAuthenticated, loginAllowed, recordLoginFailure, verifyCsrf, verifyPassword } from "./auth.js";
 
 const app = new Hono();
 
@@ -36,6 +36,7 @@ app.get("/homes/workshop", (c) => c.html(layout({ title: "発声ワークショ�
 app.get("/homes/option", (c) => c.redirect("/", 301));
 
 app.get("/bands", async (c) => {
+  const authenticated = await isAuthenticated(c);
   const { results } = await c.env.DB.prepare(
     "SELECT slug, band_name, image_key FROM bands ORDER BY sort_order, band_name"
   ).all();
@@ -44,11 +45,13 @@ app.get("/bands", async (c) => {
     : "<p>掲載準備中です。</p>";
   return c.html(layout({
     title: "バンド紹介",
-    body: `<section><h1>バンド紹介</h1><div class="grid">${content}</div></section>`
+    authenticated,
+    body: `<section><h1>バンド紹介</h1>${authenticated ? '<p><a class="button" href="/admin/bands/new">バンド登録</a></p>' : ""}<div class="grid">${content}</div></section>`
   }));
 });
 
 app.get("/bands/:slug", async (c) => {
+  const authenticated = await isAuthenticated(c);
   const band = await c.env.DB.prepare(
     "SELECT id, slug, band_name, description, image_key FROM bands WHERE slug = ?"
   ).bind(c.req.param("slug")).first();
@@ -69,7 +72,8 @@ app.get("/bands/:slug", async (c) => {
 
   return c.html(layout({
     title: band.band_name,
-    body: `<article><h1>${escapeHtml(band.band_name)}</h1>${image}
+    authenticated,
+    body: `<article><h1>${escapeHtml(band.band_name)}</h1>${authenticated ? `<p><a class="button" href="/admin/bands/${encodeURIComponent(band.slug)}/edit">編集</a></p>` : ""}${image}
       <p class="preserve-lines">${escapeHtml(band.description)}</p>
       ${memberList ? `<h2>メンバー</h2><ul>${memberList}</ul>` : ""}
       ${linkList ? `<h2>リンク</h2><ul>${linkList}</ul>` : ""}
@@ -78,6 +82,7 @@ app.get("/bands/:slug", async (c) => {
 });
 
 async function renderGigs(c, archived) {
+  const authenticated = await isAuthenticated(c);
   const operator = archived ? "<" : ">=";
   const order = archived ? "DESC" : "ASC";
   const { results } = await c.env.DB.prepare(
@@ -86,7 +91,8 @@ async function renderGigs(c, archived) {
   const cards = results.length ? results.map(gigCard).join("") : "<p>掲載情報はありません。</p>";
   return c.html(layout({
     title: archived ? "過去の出演情報" : "出演情報",
-    body: `<section><h1>${archived ? "過去の出演情報" : "出演情報"}</h1>
+    authenticated,
+    body: `<section><h1>${archived ? "過去の出演情報" : "出演情報"}</h1>${authenticated && !archived ? '<p><a class="button" href="/admin/gigs/new">出演情報を登録</a></p>' : ""}
       <p><a href="${archived ? "/gigs" : "/gigs/archive"}">${archived ? "今後の出演を見る" : "過去の出演を見る"}</a></p>
       <div class="grid">${cards}</div>
     </section>`
@@ -97,6 +103,7 @@ app.get("/gigs", (c) => renderGigs(c, false));
 app.get("/gigs/archive", (c) => renderGigs(c, true));
 
 app.get("/gigs/:id", async (c) => {
+  const authenticated = await isAuthenticated(c);
   const gig = await c.env.DB.prepare(
     "SELECT id, gig_name, event_date, start_time, end_time, location, description FROM gigs WHERE id = ?"
   ).bind(c.req.param("id")).first();
@@ -121,7 +128,8 @@ app.get("/gigs/:id", async (c) => {
 
   return c.html(layout({
     title: gig.gig_name,
-    body: `<article><h1>${escapeHtml(gig.gig_name)}</h1>
+    authenticated,
+    body: `<article><h1>${escapeHtml(gig.gig_name)}</h1>${authenticated ? `<p><a class="button" href="/admin/gigs/${gig.id}/edit">編集</a></p>` : ""}
       <p><time datetime="${escapeHtml(gig.event_date)}">${escapeHtml(gig.event_date)}</time>
       ${escapeHtml(gig.start_time)}${gig.end_time ? `〜${escapeHtml(gig.end_time)}` : ""}</p>
       ${gig.location ? `<p>${escapeHtml(gig.location)}</p>` : ""}
