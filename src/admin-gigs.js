@@ -6,6 +6,24 @@ const gigsAdmin = new Hono();
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 const IMAGE_TYPES = new Map([["image/jpeg", "jpg"], ["image/png", "png"], ["image/webp", "webp"]]);
 
+function detectedImageType(bytes) {
+  if (bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return "image/jpeg";
+  if (bytes.length >= 8 && [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a].every((value, index) => bytes[index] === value)) return "image/png";
+  if (bytes.length >= 12 &&
+      String.fromCharCode(...bytes.slice(0, 4)) === "RIFF" &&
+      String.fromCharCode(...bytes.slice(8, 12)) === "WEBP") return "image/webp";
+  return null;
+}
+
+async function checkedImage(file) {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  const detected = detectedImageType(bytes);
+  if (!detected || detected !== file.type || !IMAGE_TYPES.has(detected)) {
+    throw new Error("画像ファイルの内容と形式が一致しません。");
+  }
+  return { bytes, extension: IMAGE_TYPES.get(detected), contentType: detected };
+}
+
 gigsAdmin.use("*", async (c, next) => {
   if (!await isAuthenticated(c)) return c.redirect("/login", 303);
   await next();
@@ -85,12 +103,12 @@ async function uploadImages(c, form, gigName) {
   const keys = [];
   try {
     for (const file of files) {
-      const extension = IMAGE_TYPES.get(file.type);
-      if (!extension) throw new Error("画像はJPEG、PNG、WebPのみ使用できます。");
+      if (!IMAGE_TYPES.has(file.type)) throw new Error("画像はJPEG、PNG、WebPのみ使用できます。");
       if (file.size > MAX_IMAGE_BYTES) throw new Error("画像は1枚5MB以下にしてください。");
-      const key = `gigs/${crypto.randomUUID()}.${extension}`;
-      await c.env.IMAGES.put(key, file.stream(), {
-        httpMetadata: { contentType: file.type },
+      const checked = await checkedImage(file);
+      const key = `gigs/${crypto.randomUUID()}.${checked.extension}`;
+      await c.env.IMAGES.put(key, checked.bytes, {
+        httpMetadata: { contentType: checked.contentType },
         customMetadata: { originalName: file.name.slice(0, 200) }
       });
       keys.push({ key, altText });
