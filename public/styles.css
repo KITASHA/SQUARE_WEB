@@ -186,3 +186,32 @@ footer {
   .feature { grid-template-columns: 1fr; }
   .feature-reverse > div { order: initial; }
 }
+
+
+.login {
+  width: min(32rem, 100%);
+  margin: 2rem auto;
+}
+
+.login form {
+  display: grid;
+  gap: 1rem;
+}
+
+.login label {
+  display: grid;
+  gap: .35rem;
+}
+
+.login input {
+  width: 100%;
+  padding: .75rem;
+  border: 1px solid var(--line);
+  border-radius: .25rem;
+  font: inherit;
+}
+
+.login .button {
+  border: 0;
+  cursor: pointer;
+}
