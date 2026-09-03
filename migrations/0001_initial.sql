@@ -1,0 +1,66 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE bands (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  slug TEXT NOT NULL UNIQUE,
+  band_name TEXT NOT NULL CHECK (length(band_name) BETWEEN 1 AND 30),
+  description TEXT NOT NULL,
+  image_key TEXT,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE band_members (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  band_id INTEGER NOT NULL REFERENCES bands(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  sort_order INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE band_links (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  band_id INTEGER NOT NULL REFERENCES bands(id) ON DELETE CASCADE,
+  label TEXT NOT NULL,
+  url TEXT NOT NULL,
+  sort_order INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE gigs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  gig_name TEXT NOT NULL CHECK (length(gig_name) BETWEEN 1 AND 50),
+  event_date TEXT NOT NULL,
+  start_time TEXT NOT NULL,
+  end_time TEXT,
+  location TEXT,
+  description TEXT NOT NULL,
+  image_key TEXT,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE gig_images (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  gig_id INTEGER NOT NULL REFERENCES gigs(id) ON DELETE CASCADE,
+  object_key TEXT NOT NULL UNIQUE,
+  alt_text TEXT NOT NULL DEFAULT '',
+  sort_order INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE gig_links (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  gig_id INTEGER NOT NULL REFERENCES gigs(id) ON DELETE CASCADE,
+  label TEXT NOT NULL,
+  url TEXT NOT NULL,
+  sort_order INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE gig_bands (
+  gig_id INTEGER NOT NULL REFERENCES gigs(id) ON DELETE CASCADE,
+  band_id INTEGER NOT NULL REFERENCES bands(id) ON DELETE CASCADE,
+  PRIMARY KEY (gig_id, band_id)
+);
+
+CREATE INDEX idx_bands_sort ON bands(sort_order, band_name);
+CREATE INDEX idx_gigs_date ON gigs(event_date);
+CREATE INDEX idx_gig_bands_band ON gig_bands(band_id);
