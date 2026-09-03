@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { bandCard, escapeHtml, gigCard, layout, safeExternalUrl } from "./html.js";
+import { aboutPage, homePage, musicSquarePage, regularActivityPage, starterBandPage, workshopPage } from "./pages.js";
 
 const app = new Hono();
 
@@ -8,34 +9,20 @@ app.use("*", async (c, next) => {
   c.header("X-Content-Type-Options", "nosniff");
   c.header("Referrer-Policy", "strict-origin-when-cross-origin");
   c.header("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
-  c.header("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'");
+  c.header("Content-Security-Policy", "default-src 'self'; img-src 'self' data: https://raw.githubusercontent.com; style-src 'self'; script-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'");
 });
 
 app.get("/", (c) => c.html(layout({
   title: "岡山アカペラサークル",
-  body: `<section class="hero">
-    <p class="eyebrow">Okayama A Cappella Circle</p>
-    <h1>SQUARE</h1>
-    <p>岡山で活動するアカペラサークル「SQUARE」の公式サイトです。</p>
-  </section>
-  <section class="links">
-    <a class="panel" href="/homes/about">SQUAREについて</a>
-    <a class="panel" href="/bands">バンド紹介</a>
-    <a class="panel" href="/gigs">出演情報</a>
-  </section>`
+  body: homePage()
 })));
 
-app.get("/homes/about", (c) => c.html(layout({
-  title: "SQUAREについて",
-  body: '<section><h1>SQUAREについて</h1><p>現行サイトの文章と画像を確認後、このページへ移行します。</p></section>'
-})));
-
-for (const path of ["/homes/show_1", "/homes/show_2", "/homes/show_3", "/homes/option", "/homes/workshop"]) {
-  app.get(path, (c) => c.html(layout({
-    title: "SQUARE",
-    body: '<section><h1>SQUARE</h1><p>現行ページの内容を移行準備中です。</p></section>'
-  })));
-}
+app.get("/homes/about", (c) => c.html(layout({ title: "SQUAREについて", body: aboutPage() })));
+app.get("/homes/show_1", (c) => c.html(layout({ title: "定期活動会", body: regularActivityPage() })));
+app.get("/homes/show_2", (c) => c.html(layout({ title: "Okayama Music SQUARE", body: musicSquarePage() })));
+app.get("/homes/show_3", (c) => c.html(layout({ title: "スターターバンド制度", body: starterBandPage() })));
+app.get("/homes/workshop", (c) => c.html(layout({ title: "発声ワークショップ動画", body: workshopPage() })));
+app.get("/homes/option", (c) => c.redirect("/", 301));
 
 app.get("/bands", async (c) => {
   const { results } = await c.env.DB.prepare(
