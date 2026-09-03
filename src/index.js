@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import admin from "./admin.js";
 import { bandCard, escapeHtml, gigCard, layout, safeExternalUrl } from "./html.js";
 import { aboutPage, homePage, musicSquarePage, regularActivityPage, starterBandPage, workshopPage } from "./pages.js";
 import { clearLoginFailures, clearSessionCookie, createCsrfCookie, createSessionCookie, loginAllowed, recordLoginFailure, verifyCsrf, verifyPassword } from "./auth.js";
@@ -12,6 +13,11 @@ app.use("*", async (c, next) => {
   c.header("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
   c.header("Content-Security-Policy", "default-src 'self'; img-src 'self' data: https://raw.githubusercontent.com; style-src 'self'; script-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'");
 });
+
+app.route("/admin", admin);
+
+app.get("/bands/new", (c) => c.redirect("/admin/bands/new", 302));
+app.get("/bands/:slug/edit", (c) => c.redirect(`/admin/bands/${encodeURIComponent(c.req.param("slug"))}/edit`, 302));
 
 app.get("/", (c) => c.html(layout({
   title: "岡山アカペラサークル",
