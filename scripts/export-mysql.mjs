@@ -6,11 +6,7 @@ if (!process.env.MYSQL_URL) {
   throw new Error("Set MYSQL_URL in the environment. Never commit it.");
 }
 
-const connection = await mysql.createConnection({
-  uri: process.env.MYSQL_URL,
-  charset: "utf8mb4",
-  timezone: "Z"
-});
+const connection = await mysql.createConnection(process.env.MYSQL_URL);
 
 const tables = ["bands", "gigs", "gig_bands", "active_storage_attachments", "active_storage_blobs"];
 const output = {
@@ -20,8 +16,10 @@ const output = {
 };
 
 try {
+  await connection.query("SET NAMES utf8mb4");
+  await connection.query("SET time_zone = '+00:00'");
   await connection.query("SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ");
-  await connection.query("START TRANSACTION READ ONLY WITH CONSISTENT SNAPSHOT");
+  await connection.query("START TRANSACTION WITH CONSISTENT SNAPSHOT, READ ONLY");
   for (const table of tables) {
     const [rows] = await connection.query("SELECT * FROM ??", [table]);
     output.tables[table] = rows;
