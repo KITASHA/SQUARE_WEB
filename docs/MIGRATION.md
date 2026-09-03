@@ -41,7 +41,7 @@
 - [x] Implement shared-password authentication
 - [x] Implement authenticated band and gig CRUD
 - [x] Implement CSRF protection and login rate limiting
-- [x] Add upload type and size validation (file-signature validation remains)
+- [x] Add upload type, size and file-signature validation
 - [ ] Create D1 database and R2 bucket
 - [ ] Replace the D1 placeholder ID in wrangler.jsonc
 - [ ] Configure Cloudflare and GitHub secrets
