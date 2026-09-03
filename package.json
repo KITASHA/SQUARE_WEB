@@ -10,7 +10,8 @@
     "db:migrate:remote": "wrangler d1 migrations apply square-web --remote",
     "data:export": "node scripts/export-mysql.mjs",
     "data:convert": "node scripts/generate-d1-import.mjs",
-    "images:upload": "node scripts/upload-r2-images.mjs"
+    "images:upload": "node scripts/upload-r2-images.mjs",
+    "secrets:generate": "node scripts/generate-secrets.mjs"
   },
   "dependencies": {
     "hono": "^4.9.0"
