@@ -215,3 +215,64 @@ footer {
   border: 0;
   cursor: pointer;
 }
+
+
+.admin-form {
+  width: min(48rem, 100%);
+  margin: 0 auto;
+}
+
+.admin-form form {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-form label {
+  display: grid;
+  gap: .35rem;
+  font-weight: 700;
+}
+
+.admin-form input,
+.admin-form textarea {
+  width: 100%;
+  padding: .7rem;
+  border: 1px solid var(--line);
+  border-radius: .25rem;
+  background: white;
+  font: inherit;
+}
+
+.admin-form fieldset {
+  display: grid;
+  gap: .75rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+}
+
+.admin-form .button {
+  border: 0;
+  cursor: pointer;
+}
+
+.error {
+  padding: .75rem;
+  color: #7c1010;
+  background: #ffe8e8;
+  border: 1px solid #d99;
+}
+
+.danger-form {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.danger-form button {
+  justify-self: start;
+  padding: .6rem 1rem;
+  color: white;
+  background: #a00000;
+  border: 0;
+  cursor: pointer;
+}
