@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { bandCard, escapeHtml, gigCard, layout, safeExternalUrl } from "./html.js";
 import { aboutPage, homePage, musicSquarePage, regularActivityPage, starterBandPage, workshopPage } from "./pages.js";
+import { clearLoginFailures, clearSessionCookie, createCsrfCookie, createSessionCookie, loginAllowed, recordLoginFailure, verifyCsrf, verifyPassword } from "./auth.js";
 
 const app = new Hono();
 
@@ -133,10 +134,50 @@ app.get("/media/:key{.+}", async (c) => {
   return new Response(object.body, { headers });
 });
 
-app.get("/login", (c) => c.html(layout({
-  title: "会員ログイン",
-  body: '<section><h1>会員ログイン</h1><p>安全な共通パスワード認証は次の実装工程で追加します。</p></section>'
-})));
+app.get("/login", (c) => {
+  const { token, cookie } = createCsrfCookie();
+  c.header("Set-Cookie", cookie);
+  return c.html(layout({
+    title: "会員ログイン",
+    body: `<section class="login"><h1>会員ログイン</h1>
+      <form action="/login" method="post">
+        <input type="hidden" name="csrf_token" value="${token}">
+        <label>共通パスワード<input name="password" type="password" required autocomplete="current-password" maxlength="256"></label>
+        <button class="button" type="submit">ログイン</button>
+      </form>
+    </section>`
+  }));
+});
+
+app.post("/login", async (c) => {
+  const contentType = c.req.header("Content-Type") || "";
+  if (!contentType.startsWith("application/x-www-form-urlencoded")) return c.text("Unsupported Media Type", 415);
+  const form = await c.req.parseBody();
+  if (!verifyCsrf(c, form.csrf_token)) return c.text("Invalid CSRF token", 403);
+
+  const rate = await loginAllowed(c);
+  if (!rate.allowed) return c.text("ログイン試行が多すぎます。15分後に再度お試しください。", 429);
+
+  const valid = await verifyPassword(String(form.password || ""), c.env.ADMIN_PASSWORD_HASH);
+  if (!valid) {
+    await recordLoginFailure(c, rate.key);
+    return c.html(layout({
+      title: "会員ログイン",
+      body: '<section><h1>ログインできませんでした</h1><p><a href="/login">もう一度試す</a></p></section>'
+    }), 401);
+  }
+
+  await clearLoginFailures(c, rate.key);
+  c.header("Set-Cookie", await createSessionCookie(c.env.SESSION_SECRET));
+  return c.redirect("/", 303);
+});
+
+app.post("/logout", (c) => {
+  const origin = c.req.header("Origin");
+  if (!origin || origin !== new URL(c.req.url).origin) return c.text("Forbidden", 403);
+  c.header("Set-Cookie", clearSessionCookie());
+  return c.redirect("/", 303);
+});
 
 for (const path of ["/topics", "/releases", "/events"]) {
   app.all(path, (c) => c.redirect("/", 301));
