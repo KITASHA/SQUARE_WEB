@@ -38,6 +38,7 @@ function targetFor(type, record, attachment) {
     sourceFilename: blob.filename,
     sourceContentType: blob.content_type,
     sourceByteSize: Number(blob.byte_size),
+    sourceChecksum: blob.checksum,
     targetKey: `${folder}/${blob.key}-${safeName(blob.filename)}`
   };
 }
