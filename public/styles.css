@@ -115,3 +115,74 @@ footer {
 
   main { padding-top: 2rem; }
 }
+
+
+.button {
+  display: inline-block;
+  padding: .65rem 1rem;
+  color: #fff;
+  background: var(--accent);
+  border-radius: .25rem;
+  text-decoration: none;
+}
+
+.image-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+}
+
+.image-link {
+  display: grid;
+  color: var(--ink);
+  background: white;
+  border: 1px solid var(--line);
+  text-decoration: none;
+}
+
+.image-link img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.image-link span {
+  padding: 1rem;
+  font-weight: 700;
+}
+
+.content-page > h1 {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.feature {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(240px, 5fr);
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  padding: 3rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.feature-reverse > div { order: 2; }
+
+.feature-image {
+  display: block;
+  width: 100%;
+  max-height: 520px;
+  object-fit: cover;
+}
+
+.related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem 1.5rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 700px) {
+  .feature { grid-template-columns: 1fr; }
+  .feature-reverse > div { order: initial; }
+}
