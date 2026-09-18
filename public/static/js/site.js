@@ -9,15 +9,13 @@ function headerMarkup() {
     <header class="sq-header">
       <div class="sq-header-inner">
         <a class="sq-brand" href="/" aria-label="SQUARE ホーム">
-          <span class="sq-brand-mark" aria-hidden="true"></span>
-          <span class="sq-brand-name">SQUARE</span>
+          <span class="sq-brand-name">Home</span>
         </a>
         <button class="sq-menu-toggle" type="button" aria-label="メニューを開く" aria-expanded="false" aria-controls="siteMenu">
           <span></span><span></span><span></span>
         </button>
         <nav class="sq-nav" id="siteMenu" aria-label="メインナビゲーション">
           <a href="/homes/about">SQUAREについて</a>
-          <a href="/homes/show_1">定期活動会</a>
           <a href="/homes/join">入会について</a>
           <span class="sq-nav-divider" aria-hidden="true"></span>
           <span class="sq-nav-social">
@@ -34,10 +32,8 @@ function footerMarkup() {
     <footer class="sq-footer">
       <div class="sq-footer-inner">
         <a class="sq-footer-brand" href="/" aria-label="SQUARE ホーム">
-          <span class="sq-brand-mark" aria-hidden="true"></span>
-          <span><strong>SQUARE</strong><small>Okayama A Cappella Circle</small></span>
+          <small>Okayama A Cappella Circle SQUARE</small>
         </a>
-        <p class="sq-footer-copy">歌でつながる、岡山のアカペラサークル。</p>
         <div class="sq-footer-social">
           <a href="https://twitter.com/square_okayama" target="_blank" rel="noopener noreferrer" aria-label="X">${socialIcons.x}</a>
           <a href="https://www.instagram.com/square_okayama/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">${socialIcons.instagram}</a>
