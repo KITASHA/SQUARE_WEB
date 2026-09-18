@@ -1,66 +1,33 @@
-# Rails to Cloudflare migration
+# 静的紹介サイトへの再構築
 
-## Confirmed scope
+2026-09-18のユーザー指定により、以前のDB付き移行案を置き換えました。掲載文章は加筆・要約・言い換えを行っていません。
 
-### Remove
+- 既存の紹介ページ、SNS、YouTube、資料・申込フォームへのリンクを残す。
+- バンド一覧・詳細・CRUD・画像管理、出演情報・アーカイブ・CRUD・関連付け、認証・管理画面を廃止。
+- NEWS、体験・見学可能日、リリース、問い合わせ保存、下書き、予約公開、embeddingsも廃止。
+- 「入会について」の静的な案内文・外部リンクは残し、日程表だけ削除。
+- 追加指示により、発声ワークショップ動画のページとトップのカードを廃止。
+- トップに定期活動会（show_1）・スターターバンド制度（show_3）のカードを追加。既存のshow_2を含む紹介ページへのカードとYouTubeの計6枚を既存デザインで配置。
+- 公開ページはトップ、about、show_1、show_2、show_3、joinの6ページ。紹介ページ本文とCSSは変更しない。
+- show_2のリリース由来の募集告知とその画像だけ削除。イベントの一般的な紹介文章は保持。
+- 既存広告タグは変更せず保持。第三者の広告配信内容はこのリポジトリの管理対象外。
+- 元の21画像はすべて保持。初回移植時に使用した13画像と元のCSSはハッシュ一致で検証。
+- アイコンのCSS・フォントは現行CDNのものをローカル化。faviconは旧参照先の404を解消。
 
-- NEWS (topics)
-- 体験・見学可能日 (events)
-- リリース (releases)
-- 問い合わせ内容のDB保存
-- 下書き・予約公開
-- embeddings
+## URL
 
-### Preserve
+| 旧URL | 動作 |
+| --- | --- |
+| /events と配下 | /homes/join へ301 |
+| /bands、/gigs、/topics、/releases と配下 | / へ301 |
+| /login、/logout、/sessions、/admin と配下 | / へ301 |
+| /homes/option、/homes/workshop と配下（.htmlを含む） | / へ301 |
+| その他の存在しないURL | 404 |
 
-- トップページ
-- バンド一覧・slug詳細
-- バンド画像
-- 出演情報一覧・詳細
-- 過去出演アーカイブ
-- 出演情報と複数バンドの関連
-- 出演情報画像
-- 紹介ページと外部リンク
-- 共通パスワード方式による管理機能
+転送はGET/HEADのみです。POST/PUT/PATCH/DELETE等は405で拒否し、書込み処理は一切ありません。古いCookieが届いても参照せず、新たなCookieは発行しません。
 
-## Current implementation
+## 元データ
 
-- [x] JavaScript + Hono Worker
-- [x] Workers Static Assets
-- [x] D1 schema for bands, gigs, links, members and relationships
-- [x] R2 object-key based image model
-- [x] Public band routes
-- [x] Public gig routes and date-based archive
-- [x] Existing informational URL placeholders
-- [x] Redirects for removed resources
-- [x] Security headers and output escaping
-- [x] GitHub Actions deployment workflow
-- [ ] Copy exact HTML, CSS, wording and images from Rails
-- [ ] Export MySQL records and preserve band slugs
-- [ ] Upload selected existing images to R2
-- [x] Implement shared-password authentication
-- [x] Implement authenticated band and gig CRUD
-- [x] Implement CSRF protection and login rate limiting
-- [x] Add upload type, size and file-signature validation
-- [ ] Create D1 database and R2 bucket
-- [ ] Replace the D1 placeholder ID in wrangler.jsonc
-- [ ] Configure Cloudflare and GitHub secrets
-- [ ] Test at workers.dev URL
-- [ ] Compare desktop and mobile views with production
-- [ ] Configure redirects for every discontinued legacy URL
-- [ ] Switch the custom domain only after approval
+公開ページを2026-09-18に読み取り、旧Railsテンプレートと照合しました。対応表は `content-sources.json`、比較基準は `tests/fixtures/content-baseline.json` にあります。比較基準は初回移植時の記録を変更せず保持し、ワークショップ廃止とトップの6カードへの変更はテスト側で明示します。セッション情報やCSRFトークンは保存・配信しません。
 
-## Secrets
-
-Never commit secret values. The planned production configuration uses:
-
-- Cloudflare Worker secret containing only the shared password hash
-- Cloudflare Worker secret for signing session cookies
-- GitHub Actions secret: CLOUDFLARE_API_TOKEN
-- GitHub Actions secret: CLOUDFLARE_ACCOUNT_ID
-
-The password exposed in the Rails SessionsController must not be reused.
-
-## Safety boundary
-
-Do not change DNS, stop Lightsail, delete MySQL data, delete uploaded images, or rewrite Git history without explicit approval.
+旧Railsリポジトリと本番サービスには変更を加えません。旧Cloudflare実装の未コミット変更は、反映前の作業スナップショットに保管します。

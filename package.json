@@ -1,23 +1,25 @@
 {
   "name": "square-web",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "db:migrate:local": "wrangler d1 migrations apply square-web --local",
-    "db:migrate:remote": "wrangler d1 migrations apply square-web --remote",
-    "data:export": "node scripts/export-mysql.mjs",
-    "data:convert": "node scripts/generate-d1-import.mjs",
-    "images:upload": "node scripts/upload-r2-images.mjs",
-    "secrets:generate": "node scripts/generate-secrets.mjs"
-  },
-  "dependencies": {
-    "hono": "^4.9.0"
+    "deploy:dry-run": "wrangler deploy --dry-run",
+    "types": "wrangler types",
+    "check": "node scripts/check-syntax.mjs",
+    "lint": "eslint src scripts tests public/site.js",
+    "test": "node --test tests/*.test.mjs",
+    "validate": "npm run check && npm run lint && npm test"
   },
   "devDependencies": {
-    "wrangler": "^4.0.0",
-    "mysql2": "^3.14.0"
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.10.0",
+    "globals": "^17.12.0",
+    "wrangler": "^4.134.0"
   }
 }

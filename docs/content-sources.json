@@ -1,0 +1,20 @@
+{
+  "captured": "2026-09-18",
+  "origin": "https://square-okayama.com",
+  "pages": {
+    "index.html": "/",
+    "homes/about.html": "/homes/about",
+    "homes/show_1.html": "/homes/show_1",
+    "homes/show_2.html": "/homes/show_2",
+    "homes/show_3.html": "/homes/show_3",
+    "homes/join.html": "/events"
+  },
+  "notes": [
+    "Six retained pages preserve their body copy and classes/styles, except the explicitly approved index card changes. Retired blocks removed.",
+    "Index cards: about, show_1, show_2, show_3, join and the existing external YouTube channel, using the original card design.",
+    "show_1 and show_3 cards reuse their existing titles and images (about_image_4.jpg and about_image_6.jpg).",
+    "Workshop videos and their page are retired; /homes/workshop, its .html form and descendants redirect to /. The original baseline remains a historical reference.",
+    "Enrollment copy and external links retained at /homes/join; only the dates table is retired.",
+    "Existing ad tags are retained; advertising itself is not a new feature."
+  ]
+}
