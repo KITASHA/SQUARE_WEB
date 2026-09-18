@@ -1,8 +1,9 @@
 # SQUARE 公式サイト
 
-既存の文章・画像・Bootstrapデザインを保持した、Cloudflare Workers Static Assets 用サイトです。
+岡山アカペラサークル SQUARE の静的サイトです。Cloudflare Workers Static Assets で公開します。
+Bootstrap は使用せず、HTML + CSS + JavaScript だけで構成しています。
 
-## 残すページ
+## 公開ページ
 
 | URL | 内容 |
 | --- | --- |
@@ -10,14 +11,37 @@
 | /homes/about | SQUAREについて |
 | /homes/show_1 | 定期活動会 |
 | /homes/show_2 | Okayama Music SQUARE |
-| /homes/show_3 | スターターバンド制度の紹介 |
-| /homes/join | 入会について・資料・申込フォームへのリンク |
+| /homes/show_3 | スターターバンド制度 |
+| /homes/join | 入会について |
 
-公開ページは上記の6ページです。トップには既存のカードデザインで、SQUAREについて・定期活動会・Okayama Music SQUARE・スターターバンド制度・入会について・YouTubeの6枚を配置しています。
+## ファイル構成
 
-スターターバンド制度の説明は紹介文章として残します。登録バンドの一覧・詳細・画像管理機能は廃止しています。
+```text
+public/
+├─ index.html
+├─ 404.html
+├─ robots.txt
+├─ homes/
+│  ├─ about.html
+│  ├─ join.html
+│  ├─ show_1.html
+│  ├─ show_2.html
+│  └─ show_3.html
+└─ static/
+   ├─ css/
+   │  └─ style.css
+   ├─ js/
+   │  └─ site.js
+   ├─ images/
+   ├─ icons/
+   │  ├─ favicon.ico
+   │  └─ apple-touch-icon.png
+   └─ manifest.json
+```
 
-バンド、出演情報、認証・管理画面、NEWS、体験・見学可能日、リリース情報、発声ワークショップ動画は廃止しました。旧 `/homes/workshop` はトップへ301転送します。活動紹介のYouTubeチャンネルリンクは残します。DB、R2、Secrets、Rails、Hono、データ移行処理は不要です。
+普段のデザイン変更は `public/static/css/style.css`、共通ヘッダー・フッターは `public/static/js/site.js`、画像は `public/static/images/` を編集します。
+
+色は `style.css` 冒頭の `--sq-*` CSS変数にまとめています。グレーから青や緑に変更する場合も、基本的にはここを変更すれば全ページに反映されます。
 
 ## 開発・確認
 
@@ -26,23 +50,18 @@ Node.js 24以上を使用します。
 ```sh
 npm ci
 npm run validate
-npm run deploy:dry-run
 npm run dev
 ```
 
-HTMLは `public/index.html` と `public/homes/*.html`、元のCSSは `public/legacy.css`、画像は `public/images/` にあります。トップの承認済みカード変更を除き、元の紹介文、リンク、クラス、インラインスタイルを維持しています。カードにも既存のBootstrap構造を使用し、CSSは変更していません。メニューの開閉とページ上部への移動だけを `public/site.js` が担当します。
+ローカル起動後は通常 `http://localhost:8787` で確認できます。
 
-`tests/fixtures/content-baseline.json` は移植元の本番HTMLを独立して記録した検証基準です。廃止したワークショップも過去の参照として記録に残します。テストでは対象から除き、トップの承認済みカード変更は独立した期待値として比較します。公開HTMLから再生成してテストを通す使い方はしません。
+## Cloudflare
 
-## 仮公開
+`public/` を Static Assets として配信し、`src/index.js` は旧URLのリダイレクトとセキュリティヘッダーを担当します。
 
-`wrangler.jsonc` は `square-web-staging` の workers.dev 専用です。独自ドメイン・D1・R2の設定はありません。仮公開は `X-Robots-Tag` と `robots.txt` で検索対象から外しています。
+仮公開では `wrangler.jsonc` の `PREVIEW=true` により `X-Robots-Tag: noindex, nofollow` を付与し、`robots.txt` でもクロールを止めています。本番公開時は検索公開方針に合わせて変更してください。
 
 ```sh
 npx wrangler login
 npm run deploy
 ```
-
-本番ドメインの切り替えは別作業です。GitHub Actionsのデプロイは手動実行に限定しています。
-
-詳細: [移植範囲](docs/MIGRATION.md)、[Cloudflare手順](docs/CLOUDFLARE_SETUP.md)、[検証記録](docs/REVIEW.md)。

@@ -1,163 +1,32 @@
 <!DOCTYPE html>
-<html lang="ja" data-bs-theme="auto">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="岡山アカペラサークルSQUAREの公式サイトです。サークルの概要や最新のイベント情報などを掲載しています。">
-    <title>岡山アカペラサークルSQUARE</title>
-
-    <link rel="stylesheet" href="/legacy.css">
-    <script src="/site.js" defer></script>
-
-    <!-- Bootstrap Icons (same font as the original site) -->
-  <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Favicons -->
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <link rel="icon" href="/favicon.ico">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="dark">
-
-  </head>
-  <body>
-<header data-bs-theme="dark" style="position: fixed; top: 0; left: 0; right: 0; background-color: #fff; z-index: 1000;">
-  <!-- ナビゲーションバーの折りたたみ部分 -->
-  <div class="collapse text-bg-dark" id="navbarHeader">
-    <div class="container">
-      <div class="row">
-        <!-- 左カラム：ユーザー情報とニュース -->
-        <div class="col-sm-8 col-md-7 py-4">
-          <h4>Welcome! </h4>
-        </div>
-        <!-- 右カラム：コンタクト情報 -->
-        <div class="col-sm-4 offset-md-1 py-4">
-          <h4>Contact</h4>
-          <ul class="list-unstyled">
-            <li class="mb-1">
-              <a href="https://twitter.com/square_okayama" class="btn btn-outline-light">Follow on X</a>
-            </li>
-            <li class="mb-1">
-              <a href="https://www.instagram.com/square_okayama/" class="btn btn-outline-light">Like on Instagram</a>
-            </li>
-          </ul>
-        </div>
-      </div>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="初心者でもバンドを組みやすくするSQUAREのスターターバンド制度について紹介します。">
+  <title>スターターバンド制度 | 岡山アカペラサークルSQUARE</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="/static/js/site.js" defer></script>
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
+  <link rel="icon" href="/static/icons/favicon.ico">
+  <link rel="manifest" href="/static/manifest.json">
+  <meta name="theme-color" content="#3f454b">
+</head>
+<body>
+  <div data-site-header></div>
+  <main class="sq-page-main">
+    <h1 class="sq-page-title">スターターバンド制度</h1>
+    <section class="sq-feature">
+      <div class="sq-feature-copy"><h2>入ってすぐでもバンドが組めるよう<br>お手伝いします！</h2><p>始めたばかりの人が最初に組む期間限定のバンド（スターターバンド）を組む為のアシストをする制度です。<br>初心者の方がバンドを組むのは至難の業なのでお手伝いします。<br><br>全メンバーで希望者を募り、既存のメンバーと新しいメンバーを混ぜてバンドを作るので初めての方でも安心して組めるかと思います。<br>楽譜もSQUARE内で用意したものを使えます。（規定あり）<br><br>基本的にOkayama Music SQUAREで披露したら解散という形ですが、バンドで話し合って継続してもかまいません。<br>（その際楽譜は各自で用意していただきます。）</p></div>
+      <div class="sq-feature-media"><img src="/static/images/about_image_6.jpg" alt="スターターバンド制度のイメージ"></div>
+    </section>
+    <h2 class="sq-section-heading">主な活動内容</h2>
+    <div class="sq-activity-grid">
+      <a class="sq-mini-card" href="/homes/show_1"><img src="/static/images/about_image_4.jpg" alt="定期活動会"><div><h3>定期活動会</h3><span>詳しく知る →</span></div></a>
+      <a class="sq-mini-card" href="/homes/show_2"><img src="/static/images/about_image_5.jpg" alt="Okayama Music SQUARE"><div><h3>Okayama Music SQUARE</h3><span>詳しく知る →</span></div></a>
+      <a class="sq-mini-card" href="/homes/about"><img src="/static/images/about_image_1.png" alt="SQUAREについて"><div><h3>SQUAREについて</h3><span>詳しく知る →</span></div></a>
     </div>
-  </div>
-
-  <!-- ナビゲーションバー -->
-  <nav class="navbar navbar-dark bg-dark shadow-sm">
-    <div class="container">
-      <a href="/" class="navbar-brand d-flex align-items-center">
-        <i class="bi bi-house me-2"></i>
-        ホームへ
-      </a>
-      <div class="d-flex justify-content-start align-items-center">
-        <button id="myBtn" class="btn" title="Go to top">
-          <i class="bi bi-arrow-up" style="color: white;">ページ上部へ</i>
-        </button>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </div>
-    </div>
-  </nav>
-</header>
-
-<div class="container marketing">
-  <div class="col-md-12 text-center" style="padding-top: 8rem;">
-    <h1 class="featurette-heading fw-normal lh-1">スターターバンド制度</h1>
-  </div>
-
-  <hr class="featurette-divider" style="margin-top: 40px;">
-
-  <div class="row featurette">
-    <div class="col-md-7">
-      <h3 class="featurette-heading fw-normal lh-1">入ってすぐでもバンドが組めるよう<br>お手伝いします！</h3>
-      <p class="lead">
-        始めたばかりの人が最初に組む期間限定のバンド（スターターバンド）を組む為のアシストをする制度です。<br>
-        初心者の方がバンドを組むのは至難の業なのでお手伝いします。<br><br>
-        全メンバーで希望者を募り、既存のメンバーと新しいメンバーを混ぜてバンドを作るので初めての方でも安心して組めるかと思います。<br>
-        楽譜もSQUARE内で用意したものを使えます。（規定あり）<br><br>
-        基本的にOkayama Music SQUAREで披露したら解散という形ですが、バンドで話し合って継続してもかまいません。<br>
-        （その際楽譜は各自で用意していただきます。）
-      </p>
-    </div>
-    <div class="col-md-5">
-      <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false">
-        <title>Placeholder</title>
-        <image xlink:href="/images/about_image_6.jpg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" />
-      </svg>
-    </div>
-  </div>
-
-  <hr class="featurette-divider">
-
-  <div class="col-md-12" style="margin-top: 80px; text-align: center;">
-    <h1 class="featurette-heading fw-normal lh-1">主な活動内容</h1>
-  </div>
-
-  <div class="row" style="margin-top: 40px;">
-    <div class="col-lg-4" style="margin-bottom: 20px;">
-      <div class="flex-container">
-        <div class="flex-item">
-          <svg class="bd-placeholder-img" width="140" height="140" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
-            <title>Placeholder</title>
-            <image href="/images/about_image_4.jpg"></image>
-          </svg>
-        </div>
-        <div>
-          <h3 class="fw-normal">定期活動会</h3>
-          <a class="btn btn-secondary" href="/homes/show_1">
-            詳しく知る &raquo;
-</a>        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-4" style="margin-bottom: 20px;">
-      <div class="flex-container">
-        <div class="flex-item">
-          <svg class="bd-placeholder-img" width="140" height="140" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
-            <title>Placeholder</title>
-            <image href="/images/about_image_5.jpg"></image>
-          </svg>
-        </div>
-        <div>
-          <h3 class="fw-normal">Okayama<br>Music<br>SQUARE</h3>
-          <a class="btn btn-secondary" href="/homes/show_2">
-            詳しく知る &raquo;
-</a>        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-4" style="margin-bottom: 20px;">
-      <div class="flex-container">
-        <div class="flex-item">
-          <svg class="bd-placeholder-img" width="140" height="140" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
-            <title>Placeholder</title>
-            <image href="/images/about_image_1.png" width="100%" height="100%" />
-          </svg>
-        </div>
-        <div>
-          <h3 class="fw-normal">SQUARE<br>について</h3>
-          <a class="btn btn-secondary" href="/homes/about">
-            詳しく知る &raquo;
-</a>        </div>
-      </div>
-    </div>
-  </div>
-
-  <hr class="featurette-divider">
-</div>
-
-<!-- admax -->
-<script src="https://adm.shinobi.jp/s/ae526bdb79b17a1245a5efe61144cce8"></script>
-<!-- admax -->
-
-<footer class="text-body-secondary py-5">
-      <div class="container">
-        <p class="float-end mb-1"><a href="/">Back to top</a></p>
-      </div>
-    </footer>
+  </main>
+  <div data-site-footer></div>
 </body>
 </html>

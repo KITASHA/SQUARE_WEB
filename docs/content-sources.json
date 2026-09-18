@@ -1,0 +1,19 @@
+{
+  "captured": "2026-09-18",
+  "origin": "https://square-okayama.com",
+  "pages": {
+    "index.html": "/",
+    "homes/about.html": "/homes/about",
+    "homes/show_1.html": "/homes/show_1",
+    "homes/show_2.html": "/homes/show_2",
+    "homes/show_3.html": "/homes/show_3",
+    "homes/join.html": "/events"
+  },
+  "notes": [
+    "Six public pages are retained: home, about, regular activity, Okayama Music SQUARE, starter band, and join.",
+    "The 2026 redesign uses custom HTML/CSS/JavaScript and no longer depends on Bootstrap.",
+    "Shared static assets live under public/static/; robots.txt remains at the public root.",
+    "Common header and footer markup is injected from public/static/js/site.js.",
+    "Workshop videos and the old dynamic application routes are retired and redirected by src/index.js."
+  ]
+}

@@ -30,7 +30,7 @@ test('all write methods are disabled, including former admin routes', async () =
 });
 
 test('retained pages and assets use static assets, HEAD preserves headers only', async () => {
-  for (const pathname of ['/', '/homes/about', '/homes/show_1', '/homes/show_2', '/homes/show_3', '/homes/join', '/legacy.css', '/site.js', '/images/about_image_1.png', '/bandstand']) {
+  for (const pathname of ['/', '/homes/about', '/homes/show_1', '/homes/show_2', '/homes/show_3', '/homes/join', '/static/css/style.css', '/static/js/site.js', '/static/images/about_image_1.png', '/bandstand']) {
     for (const method of ['GET', 'HEAD']) {
       const request = new Request(`https://square.test${pathname}`, { method, headers: { Cookie: 'square_session=invalid.%' } });
       let calls = 0;
