@@ -7,3 +7,10 @@ node_modules/
 migration/mysql-export.json
 migration/d1-import.sql
 migration/image-manifest.json
+
+.env.*
+.dev.vars.*
+*.key
+*.pem
+migration/
+.test-output/
