@@ -451,3 +451,150 @@ button, input, textarea, select { font: inherit; }
   .sq-footer-social { justify-content: flex-start; }
   .sq-footer-copy { grid-column: auto; order: initial; }
 }
+
+
+/* =========================================================
+   BANDS
+========================================================= */
+
+.bands-page {
+  min-height: 100vh;
+}
+
+.bands-hero {
+  padding: 120px 0 48px;
+}
+
+.bands-hero h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+.bands-lead {
+  margin-top: 16px;
+  line-height: 1.8;
+}
+
+.bands-section {
+  padding: 24px 0 96px;
+}
+
+.bands-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+  gap: 32px;
+}
+
+.band-card {
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  background: #fff;
+}
+
+.band-card-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #f3f3f3;
+}
+
+.band-card-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.band-card-image-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.band-card-image-empty span {
+  opacity: 0.45;
+  font-size: 0.85rem;
+}
+
+.band-card-body {
+  padding: 24px;
+}
+
+.band-name {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.band-members {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.band-members span {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #f3f3f3;
+  font-size: 0.8rem;
+}
+
+.band-description {
+  margin: 18px 0 0;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+.band-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.band-links a {
+  text-decoration: none;
+}
+
+.bands-loading,
+.bands-empty,
+.bands-error {
+  grid-column: 1 / -1;
+  padding: 48px 0;
+  text-align: center;
+}
+
+
+@media (max-width: 900px) {
+
+  .bands-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+
+@media (max-width: 640px) {
+
+  .bands-hero {
+    padding-top: 96px;
+  }
+
+  .bands-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .band-card-body {
+    padding: 20px;
+  }
+}

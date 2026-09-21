@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>バンド一覧 | Okayama A Cappella Circle SQUARE</title>
+
+  <meta
+    name="description"
+    content="Okayama A Cappella Circle SQUAREで活動しているバンドを紹介します。"
+  >
+
+  <link
+    rel="stylesheet"
+    href="/static/css/style.css"
+  >
+</head>
+
+<body>
+
+  <div id="site-header"></div>
+
+  <main class="bands-page">
+
+    <section class="bands-hero">
+
+      <div class="container">
+
+        <p class="section-label">
+          BANDS
+        </p>
+
+        <h1>
+          バンド一覧
+        </h1>
+
+        <p class="bands-lead">
+          SQUAREで活動しているバンドを紹介します。
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <section class="bands-section">
+
+      <div class="container">
+
+        <div
+          id="bands-list"
+          class="bands-grid"
+        >
+
+          <p class="bands-loading">
+            読み込み中...
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <div id="site-footer"></div>
+
+
+  <script src="/static/js/site.js"></script>
+
+  <script>
+    document.addEventListener(
+      'DOMContentLoaded',
+      () => {
+        loadBands();
+      }
+    );
+  </script>
+
+</body>
+</html>

@@ -70,3 +70,307 @@ if (mobileToggle && mobileMenu) {
   window.addEventListener('resize', () => { if (window.innerWidth > 960) closeMenu(); }, { passive: true });
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeMenu(); });
 }
+
+async function loadBands() {
+
+  const container =
+    document.getElementById(
+      'bands-list'
+    );
+
+  if (!container) {
+    return;
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        '/api/bands'
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        `HTTP ${response.status}`
+      );
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const bands =
+      Array.isArray(
+        data.bands
+      )
+        ? data.bands
+        : [];
+
+
+    if (
+      bands.length === 0
+    ) {
+
+      container.innerHTML =
+        '<p class="bands-empty">現在掲載中のバンドはありません。</p>';
+
+      return;
+    }
+
+
+    container.innerHTML =
+      bands
+        .map(
+          band =>
+            createBandCard(
+              band
+            )
+        )
+        .join('');
+
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    container.innerHTML =
+      '<p class="bands-error">バンド情報を読み込めませんでした。</p>';
+  }
+}
+
+
+function createBandCard(
+  band
+) {
+
+  const name =
+    escapeHtml(
+      band.name || ''
+    );
+
+
+  const description =
+    escapeHtml(
+      band.description || ''
+    );
+
+
+  const members =
+    Array.isArray(
+      band.members
+    )
+      ? band.members
+          .map(
+            member =>
+              escapeHtml(
+                member
+              )
+          )
+      : [];
+
+
+  const image =
+    band.imageUrl
+      ? `
+        <div class="band-card-image">
+          <img
+            src="${escapeAttribute(
+              band.imageUrl
+            )}"
+            alt="${escapeAttribute(
+              name
+            )}"
+            loading="lazy"
+          >
+        </div>
+      `
+      : `
+        <div class="band-card-image band-card-image-empty">
+          <span>No Image</span>
+        </div>
+      `;
+
+
+  const memberHtml =
+    members.length
+      ? `
+        <div class="band-members">
+          ${members
+            .map(
+              member =>
+                `<span>${member}</span>`
+            )
+            .join('')}
+        </div>
+      `
+      : '';
+
+
+  const links =
+    createBandLinks(
+      band
+    );
+
+
+  return `
+    <article class="band-card">
+
+      ${image}
+
+      <div class="band-card-body">
+
+        <h2 class="band-name">
+          ${name}
+        </h2>
+
+        ${memberHtml}
+
+        ${
+          description
+            ? `
+              <p class="band-description">
+                ${description}
+              </p>
+            `
+            : ''
+        }
+
+        ${links}
+
+      </div>
+
+    </article>
+  `;
+}
+
+
+function createBandLinks(
+  band
+) {
+
+  const links = [];
+
+
+  if (band.x) {
+
+    links.push(
+      {
+        label: 'X',
+        url: band.x
+      }
+    );
+  }
+
+
+  if (band.instagram) {
+
+    links.push(
+      {
+        label: 'Instagram',
+        url: band.instagram
+      }
+    );
+  }
+
+
+  if (band.youtube) {
+
+    links.push(
+      {
+        label: 'YouTube',
+        url: band.youtube
+      }
+    );
+  }
+
+
+  if (band.otherUrl) {
+
+    links.push(
+      {
+        label: 'Link',
+        url: band.otherUrl
+      }
+    );
+  }
+
+
+  if (
+    links.length === 0
+  ) {
+
+    return '';
+  }
+
+
+  return `
+    <div class="band-links">
+
+      ${links
+        .map(
+          link => `
+            <a
+              href="${escapeAttribute(
+                link.url
+              )}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ${escapeHtml(
+                link.label
+              )}
+            </a>
+          `
+        )
+        .join('')}
+
+    </div>
+  `;
+}
+
+
+function escapeHtml(
+  value
+) {
+
+  return String(
+    value || ''
+  )
+    .replaceAll(
+      '&',
+      '&amp;'
+    )
+    .replaceAll(
+      '<',
+      '&lt;'
+    )
+    .replaceAll(
+      '>',
+      '&gt;'
+    )
+    .replaceAll(
+      '"',
+      '&quot;'
+    )
+    .replaceAll(
+      "'",
+      '&#039;'
+    );
+}
+
+
+function escapeAttribute(
+  value
+) {
+
+  return escapeHtml(
+    value
+  );
+}
