@@ -562,6 +562,11 @@ async function handleBandsSync(
     data.bands
       .map(
         band => ({
+  
+          id:
+            String(
+              band.id || ''
+            ).trim(),
 
           name:
             String(
@@ -615,10 +620,11 @@ async function handleBandsSync(
             ).trim()
         })
       )
-      .filter(
-        band =>
-          band.name
-      );
+    .filter(
+      band =>
+        band.name &&
+        band.id
+    );
 
 
   const body =
