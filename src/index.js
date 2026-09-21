@@ -1,5 +1,5 @@
 const retired =
-  /^\/(?:bands|gigs|topics|releases|login|logout|sessions|admin)(?:\/|$|\.html$)/;
+  /^\/(?:gigs|topics|releases|login|logout|sessions|admin)(?:\/|$|\.html$)/;
 
 const enrollment =
   /^\/events(?:\/|$|\.html$)/;
@@ -11,8 +11,17 @@ const settings =
 const BAND_IMAGE_API =
   '/api/band-image-ingest';
 
+const BANDS_SYNC_API =
+  '/api/bands-sync';
+
+const BANDS_API =
+  '/api/bands';
+
 const BAND_MEDIA_PREFIX =
   '/media/';
+
+const BANDS_DATA_KEY =
+  'data/bands.json';
 
 
 function headersFor(
@@ -83,7 +92,9 @@ function json(
 ) {
 
   return new Response(
-    JSON.stringify(data),
+    JSON.stringify(
+      data
+    ),
     {
       status,
 
@@ -191,7 +202,8 @@ async function handleBandImage(
         status: 405,
 
         headers: {
-          Allow: 'POST'
+          Allow:
+            'POST'
         }
       }
     );
@@ -199,7 +211,7 @@ async function handleBandImage(
 
 
   /*
-   * Apps ScriptとWorkerだけが知っている
+   * Apps Script と Worker だけが知っている
    * Secretで認証
    */
   const suppliedSecret =
@@ -307,6 +319,7 @@ async function handleBandImage(
     return json(
       {
         ok: false,
+
         error:
           'responseId, fileId, googleAccessToken are required'
       },
@@ -320,7 +333,7 @@ async function handleBandImage(
    * 元画像を直接取得
    */
   const driveUrl =
-    `https://www.googleapis.com/drive/v3/files/` +
+    'https://www.googleapis.com/drive/v3/files/' +
     `${encodeURIComponent(fileId)}` +
     '?alt=media';
 
@@ -383,15 +396,8 @@ async function handleBandImage(
 
 
   /*
-   * 重要
-   *
-   * arrayBuffer()しない
-   *
    * Google Driveから届いた
    * ReadableStreamをそのままR2へ渡す
-   *
-   * 100MB画像でもWorkerメモリに
-   * 全部載せない
    */
   await env.BAND_IMAGES.put(
     key,
@@ -408,7 +414,9 @@ async function handleBandImage(
       customMetadata: {
 
         responseId:
-          String(responseId),
+          String(
+            responseId
+          ),
 
         source:
           'google-drive'
@@ -444,7 +452,6 @@ async function handleBandImage(
 
 
   return json({
-
     ok: true,
 
     key,
@@ -452,6 +459,304 @@ async function handleBandImage(
     url:
       `${origin}${BAND_MEDIA_PREFIX}${key}`
   });
+}
+
+
+/**
+ * Apps Script
+ * ↓
+ * POST /api/bands-sync
+ * ↓
+ * R2 data/bands.json
+ */
+async function handleBandsSync(
+  request,
+  env
+) {
+
+  if (
+    request.method !==
+    'POST'
+  ) {
+
+    return new Response(
+      'Method Not Allowed',
+      {
+        status: 405,
+
+        headers: {
+          Allow:
+            'POST'
+        }
+      }
+    );
+  }
+
+
+  /*
+   * Apps ScriptとのSecret認証
+   */
+  const suppliedSecret =
+    request.headers.get(
+      'X-SQUARE-INGEST-SECRET'
+    );
+
+
+  if (
+    !env.BAND_INGEST_SECRET ||
+    suppliedSecret !==
+      env.BAND_INGEST_SECRET
+  ) {
+
+    return json(
+      {
+        ok: false,
+        error: 'Unauthorized'
+      },
+      401
+    );
+  }
+
+
+  let data;
+
+
+  try {
+
+    data =
+      await request.json();
+
+  } catch {
+
+    return json(
+      {
+        ok: false,
+        error: 'Invalid JSON'
+      },
+      400
+    );
+  }
+
+
+  if (
+    !Array.isArray(
+      data.bands
+    )
+  ) {
+
+    return json(
+      {
+        ok: false,
+        error: 'bands must be an array'
+      },
+      400
+    );
+  }
+
+
+  /*
+   * Worker側でも
+   * 公開可能なフィールドだけに絞る
+   */
+  const bands =
+    data.bands
+      .map(
+        band => ({
+
+          name:
+            String(
+              band.name || ''
+            ).trim(),
+
+          members:
+            Array.isArray(
+              band.members
+            )
+              ? band.members
+                  .map(
+                    member =>
+                      String(
+                        member || ''
+                      ).trim()
+                  )
+                  .filter(
+                    Boolean
+                  )
+              : [],
+
+          description:
+            String(
+              band.description || ''
+            ).trim(),
+
+          x:
+            String(
+              band.x || ''
+            ).trim(),
+
+          instagram:
+            String(
+              band.instagram || ''
+            ).trim(),
+
+          youtube:
+            String(
+              band.youtube || ''
+            ).trim(),
+
+          otherUrl:
+            String(
+              band.otherUrl || ''
+            ).trim(),
+
+          imageUrl:
+            String(
+              band.imageUrl || ''
+            ).trim()
+        })
+      )
+      .filter(
+        band =>
+          band.name
+      );
+
+
+  const body =
+    JSON.stringify({
+      bands,
+
+      updatedAt:
+        new Date()
+          .toISOString()
+    });
+
+
+  /*
+   * バンド一覧JSONを
+   * R2へ保存
+   */
+  await env.BAND_IMAGES.put(
+    BANDS_DATA_KEY,
+    body,
+    {
+      httpMetadata: {
+
+        contentType:
+          'application/json; charset=utf-8',
+
+        cacheControl:
+          'no-store'
+      },
+
+      customMetadata: {
+
+        source:
+          'google-sheets'
+      }
+    }
+  );
+
+
+  return json({
+    ok: true,
+
+    count:
+      bands.length
+  });
+}
+
+
+/**
+ * 公開バンド一覧API
+ *
+ * GET /api/bands
+ */
+async function handleBands(
+  request,
+  env,
+  head
+) {
+
+  if (
+    request.method !==
+      'GET' &&
+    !head
+  ) {
+
+    return new Response(
+      'Method Not Allowed',
+      {
+        status: 405,
+
+        headers: {
+
+          Allow:
+            'GET, HEAD'
+        }
+      }
+    );
+  }
+
+
+  const object =
+    await env.BAND_IMAGES.get(
+      BANDS_DATA_KEY
+    );
+
+
+  /*
+   * まだ同期されていない場合
+   */
+  if (!object) {
+
+    const body =
+      JSON.stringify({
+        bands: [],
+        updatedAt: null
+      });
+
+
+    return new Response(
+      head
+        ? null
+        : body,
+      {
+        status: 200,
+
+        headers: {
+
+          'Content-Type':
+            'application/json; charset=utf-8',
+
+          'Cache-Control':
+            'no-store'
+        }
+      }
+    );
+  }
+
+
+  const text =
+    await object.text();
+
+
+  return new Response(
+    head
+      ? null
+      : text,
+    {
+      status: 200,
+
+      headers: {
+
+        'Content-Type':
+          'application/json; charset=utf-8',
+
+        'Cache-Control':
+          'no-store'
+      }
+    }
+  );
 }
 
 
@@ -479,6 +784,7 @@ async function handleMedia(
         status: 405,
 
         headers: {
+
           Allow:
             'GET, HEAD'
         }
@@ -586,7 +892,55 @@ export default {
 
     /*
      * Google Apps Script
-     * → R2登録
+     * → バンド一覧JSON同期
+     */
+    if (
+      pathname ===
+      BANDS_SYNC_API
+    ) {
+
+      const response =
+        await handleBandsSync(
+          request,
+          env
+        );
+
+
+      return headersFor(
+        response,
+        preview,
+        head
+      );
+    }
+
+
+    /*
+     * 公開バンド一覧API
+     */
+    if (
+      pathname ===
+      BANDS_API
+    ) {
+
+      const response =
+        await handleBands(
+          request,
+          env,
+          head
+        );
+
+
+      return headersFor(
+        response,
+        preview,
+        head
+      );
+    }
+
+
+    /*
+     * Google Apps Script
+     * → R2画像登録
      */
     if (
       pathname ===
@@ -653,6 +1007,7 @@ export default {
             status: 405,
 
             headers: {
+
               Allow:
                 'GET, HEAD'
             }
@@ -696,6 +1051,7 @@ export default {
               status: 301,
 
               headers: {
+
                 Location:
                   destination
               }
