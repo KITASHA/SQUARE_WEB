@@ -10,12 +10,12 @@
   >
 
   <title>
-    バンド一覧 | Okayama A Cappella Circle SQUARE
+    バンド紹介 | Okayama A Cappella Circle SQUARE
   </title>
 
   <meta
     name="description"
-    content="Okayama A Cappella Circle SQUAREで活動しているバンドを紹介します。"
+    content="Okayama A Cappella Circle SQUARE所属バンドの紹介ページです。"
   >
 
   <link
@@ -29,37 +29,13 @@
   <div data-site-header></div>
 
 
-  <main class="bands-page">
+  <main class="band-detail-page">
 
-    <section class="bands-hero">
-
-      <div class="container">
-
-        <p class="section-label">
-          BANDS
-        </p>
-
-        <h1>
-          バンド一覧
-        </h1>
-
-        <p class="bands-lead">
-          SQUAREで活動しているバンドを紹介します。
-        </p>
-
-      </div>
-
-    </section>
-
-
-    <section class="bands-section">
+    <section class="band-detail-section-wrapper">
 
       <div class="container">
 
-        <div
-          id="bands-list"
-          class="bands-grid"
-        >
+        <div id="band-detail">
 
           <p class="bands-loading">
             読み込み中...
@@ -83,7 +59,7 @@
     document.addEventListener(
       'DOMContentLoaded',
       () => {
-        loadBands();
+        loadBandDetail();
       }
     );
   </script>
