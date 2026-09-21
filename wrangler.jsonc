@@ -3,6 +3,7 @@
   "name": "square-web-staging",
   "main": "src/index.js",
   "compatibility_date": "2026-09-17",
+
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
@@ -10,7 +11,22 @@
     "not_found_handling": "404-page",
     "run_worker_first": true
   },
+
+  "r2_buckets": [
+    {
+      "binding": "BAND_IMAGES",
+      "bucket_name": "square-band-images"
+    }
+  ],
+
   "workers_dev": true,
-  "observability": { "enabled": true, "head_sampling_rate": 1 },
-  "vars": { "PREVIEW": "true" }
+
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+
+  "vars": {
+    "PREVIEW": "true"
+  }
 }
