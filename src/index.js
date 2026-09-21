@@ -210,10 +210,6 @@ async function handleBandImage(
   }
 
 
-  /*
-   * Apps Script と Worker だけが知っている
-   * Secretで認証
-   */
   const suppliedSecret =
     request.headers.get(
       'X-SQUARE-INGEST-SECRET'
@@ -297,9 +293,6 @@ async function handleBandImage(
   }
 
 
-  /*
-   * R2保存
-   */
   const {
     responseId,
     fileId,
@@ -328,10 +321,6 @@ async function handleBandImage(
   }
 
 
-  /*
-   * WorkerがGoogle Driveから
-   * 元画像を直接取得
-   */
   const driveUrl =
     'https://www.googleapis.com/drive/v3/files/' +
     `${encodeURIComponent(fileId)}` +
@@ -383,22 +372,11 @@ async function handleBandImage(
     );
 
 
-  /*
-   * 1回答 = 専用ディレクトリ
-   *
-   * bands/
-   *   回答ID/
-   *     1726900000000.jpg
-   */
   const key =
     `bands/${safePart(responseId)}/` +
     `${Date.now()}.${extension}`;
 
 
-  /*
-   * Google Driveから届いた
-   * ReadableStreamをそのままR2へ渡す
-   */
   await env.BAND_IMAGES.put(
     key,
     source.body,
@@ -425,10 +403,6 @@ async function handleBandImage(
   );
 
 
-  /*
-   * 新画像保存成功後
-   * 古い画像を削除
-   */
   if (
     previousKey &&
     previousKey !== key &&
@@ -493,9 +467,6 @@ async function handleBandsSync(
   }
 
 
-  /*
-   * Apps ScriptとのSecret認証
-   */
   const suppliedSecret =
     request.headers.get(
       'X-SQUARE-INGEST-SECRET'
@@ -562,7 +533,7 @@ async function handleBandsSync(
     data.bands
       .map(
         band => ({
-  
+
           id:
             String(
               band.id || ''
@@ -604,15 +575,36 @@ async function handleBandsSync(
               band.instagram || ''
             ).trim(),
 
-          youtube:
-            String(
-              band.youtube || ''
-            ).trim(),
+          otherLinks:
+            Array.isArray(
+              band.otherLinks
+            )
+              ? band.otherLinks
+                  .map(
+                    link => ({
 
-          otherUrl:
-            String(
-              band.otherUrl || ''
-            ).trim(),
+                      label:
+                        String(
+                          link?.label ||
+                          'その他リンク'
+                        ).trim() ||
+                        'その他リンク',
+
+                      url:
+                        String(
+                          link?.url || ''
+                        ).trim()
+                    })
+                  )
+                  .filter(
+                    link =>
+                      link.url
+                  )
+                  .slice(
+                    0,
+                    2
+                  )
+              : [],
 
           imageUrl:
             String(
@@ -620,11 +612,11 @@ async function handleBandsSync(
             ).trim()
         })
       )
-    .filter(
-      band =>
-        band.name &&
-        band.id
-    );
+      .filter(
+        band =>
+          band.name &&
+          band.id
+      );
 
 
   const body =
@@ -637,10 +629,6 @@ async function handleBandsSync(
     });
 
 
-  /*
-   * バンド一覧JSONを
-   * R2へ保存
-   */
   await env.BAND_IMAGES.put(
     BANDS_DATA_KEY,
     body,
@@ -710,9 +698,6 @@ async function handleBands(
     );
 
 
-  /*
-   * まだ同期されていない場合
-   */
   if (!object) {
 
     const body =
@@ -896,10 +881,6 @@ export default {
       );
 
 
-    /*
-     * Google Apps Script
-     * → バンド一覧JSON同期
-     */
     if (
       pathname ===
       BANDS_SYNC_API
@@ -920,9 +901,6 @@ export default {
     }
 
 
-    /*
-     * 公開バンド一覧API
-     */
     if (
       pathname ===
       BANDS_API
@@ -944,10 +922,6 @@ export default {
     }
 
 
-    /*
-     * Google Apps Script
-     * → R2画像登録
-     */
     if (
       pathname ===
       BAND_IMAGE_API
@@ -968,9 +942,6 @@ export default {
     }
 
 
-    /*
-     * R2画像配信
-     */
     if (
       pathname.startsWith(
         BAND_MEDIA_PREFIX
