@@ -246,10 +246,6 @@ document
           ) || '/';
 
 
-      /*
-       * /homes/band は
-       * /homes/bands を選択状態にする
-       */
       const isBandPage =
         currentPath ===
           '/homes/band' &&
@@ -891,31 +887,56 @@ function createBandLinks(
 
   const candidates = [
     {
-      label: 'X',
-      url: band.x
+      label:
+        'X',
+
+      url:
+        band.x
     },
+
     {
-      label: 'Instagram',
-      url: band.instagram
+      label:
+        'Instagram',
+
+      url:
+        band.instagram
     },
-    {
-      label: 'YouTube',
-      url: band.youtube
-    },
-    {
-      label: 'その他リンク',
-      url: band.otherUrl
-    }
+
+    ...(
+      Array.isArray(
+        band.otherLinks
+      )
+        ? band.otherLinks
+        : []
+    )
   ];
 
 
   const links =
-    candidates.filter(
-      link =>
-        safeExternalUrl(
-          link.url
-        )
-    );
+    candidates
+      .map(
+        link => ({
+
+          label:
+            String(
+              link?.label ||
+              'その他リンク'
+            ).trim() ||
+            'その他リンク',
+
+          url:
+            String(
+              link?.url ||
+              ''
+            ).trim()
+        })
+      )
+      .filter(
+        link =>
+          safeExternalUrl(
+            link.url
+          )
+      );
 
 
   if (
