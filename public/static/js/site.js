@@ -1053,3 +1053,16 @@ function escapeAttribute(
     value
   );
 }
+
+/* =========================================================
+   PAGE INITIALIZATION
+========================================================= */
+
+if (document.getElementById('bands-list')) {
+  loadBands();
+}
+
+if (document.getElementById('band-detail')) {
+  loadBandDetail();
+}
+
