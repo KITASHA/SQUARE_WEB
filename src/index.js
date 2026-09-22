@@ -7,6 +7,16 @@ const enrollment =
 const settings =
   /^\/homes\/(?:option|workshop)(?:\/|$|\.html$)/;
 
+const legacyPages = new Map([
+  ['/homes/about', '/about'],
+  ['/homes/show_1', '/session'],
+  ['/homes/show_2', '/stage'],
+  ['/homes/show_3', '/bands'],
+  ['/homes/bands', '/bands'],
+  ['/homes/band', '/band'],
+  ['/homes/join', '/join']
+]);
+
 
 const BAND_IMAGE_API =
   '/api/band-image-ingest';
@@ -874,7 +884,8 @@ export default {
 
 
     const {
-      pathname
+      pathname,
+      search
     } =
       new URL(
         request.url
@@ -995,15 +1006,36 @@ export default {
 
       let destination;
 
+      const normalizedPath =
+        pathname
+          .replace(
+            /\.html$/,
+            ''
+          )
+          .replace(
+            /\/$/,
+            ''
+          ) || '/';
 
-      if (
+      const legacyDestination =
+        legacyPages.get(
+          normalizedPath
+        );
+
+
+      if (legacyDestination) {
+
+        destination =
+          `${legacyDestination}${search}`;
+
+      } else if (
         enrollment.test(
           pathname
         )
       ) {
 
         destination =
-          '/homes/join';
+          '/join';
 
       } else if (
         retired.test(
