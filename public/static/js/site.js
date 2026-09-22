@@ -77,15 +77,15 @@ function headerMarkup() {
           id="siteMenu"
           aria-label="メインナビゲーション"
         >
-          <a href="/homes/about">
+          <a href="/about">
             SQUAREについて
           </a>
 
-          <a href="/homes/bands">
+          <a href="/bands">
             バンド紹介
           </a>
 
-          <a href="/homes/join">
+          <a href="/join">
             入会について
           </a>
 
@@ -159,15 +159,6 @@ function footerMarkup() {
             aria-label="Instagram"
           >
             ${socialIcons.instagram}
-          </a>
-
-          <a
-            href="https://www.youtube.com/channel/UCpcjVaT57zyOhB92BROiTBA"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="YouTube"
-          >
-            ${socialIcons.youtube}
           </a>
 
         </div>
@@ -248,9 +239,9 @@ document
 
       const isBandPage =
         currentPath ===
-          '/homes/band' &&
+          '/band' &&
         linkPath ===
-          '/homes/bands';
+          '/bands';
 
 
       if (
@@ -514,7 +505,7 @@ function createBandCard(
 
 
   const detailUrl =
-    `/homes/band?id=${
+    `/band?id=${
       encodeURIComponent(
         id
       )
@@ -675,7 +666,7 @@ async function loadBandDetail() {
           </p>
 
           <a
-            href="/homes/bands"
+            href="/bands"
             class="band-back-link"
           >
             バンド一覧に戻る
@@ -834,7 +825,7 @@ function createBandDetail(
         <div class="band-detail-actions">
 
           <a
-            href="/homes/bands"
+            href="/bands"
             class="band-back-link"
           >
             バンド一覧に戻る
@@ -866,7 +857,7 @@ function showBandNotFound(
         </p>
 
         <a
-          href="/homes/bands"
+          href="/bands"
           class="band-back-link"
         >
           バンド一覧に戻る
