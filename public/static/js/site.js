@@ -56,7 +56,7 @@ function headerMarkup() {
           aria-label="SQUARE ホーム"
         >
           <span class="sq-brand-name">
-            Home
+            SQUARE
           </span>
         </a>
 
@@ -81,42 +81,10 @@ function headerMarkup() {
             SQUAREについて
           </a>
 
-          <a href="/bands">
-            バンド紹介
-          </a>
-
           <a href="/join">
             入会について
           </a>
 
-          <span
-            class="sq-nav-divider"
-            aria-hidden="true"
-          ></span>
-
-          <span class="sq-nav-social">
-
-            <a
-              class="sq-nav-icon"
-              href="https://twitter.com/square_okayama"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="X"
-            >
-              ${socialIcons.x}
-            </a>
-
-            <a
-              class="sq-nav-icon"
-              href="https://www.instagram.com/square_okayama/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-            >
-              ${socialIcons.instagram}
-            </a>
-
-          </span>
         </nav>
 
       </div>
@@ -137,7 +105,7 @@ function footerMarkup() {
           aria-label="SQUARE ホーム"
         >
           <small>
-            Okayama A Cappella Circle SQUARE
+            岡山アカペラサークル SQUARE
           </small>
         </a>
 
@@ -161,7 +129,19 @@ function footerMarkup() {
             ${socialIcons.instagram}
           </a>
 
+          <a
+            href="https://www.youtube.com/channel/UCpcjVaT57zyOhB92BROiTBA"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="YouTube"
+          >
+            ${socialIcons.youtube}
+          </a>
+
         </div>
+
+        <p class="sq-footer-contact">お問い合わせはX・InstagramのDMへ</p>
+        <p class="sq-footer-copy">© SQUARE</p>
 
       </div>
 
@@ -1065,4 +1045,3 @@ if (document.getElementById('bands-list')) {
 if (document.getElementById('band-detail')) {
   loadBandDetail();
 }
-
