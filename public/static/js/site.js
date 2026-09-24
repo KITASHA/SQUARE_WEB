@@ -56,7 +56,7 @@ function headerMarkup() {
           aria-label="SQUARE ホーム"
         >
           <span class="sq-brand-name">
-            SQUARE
+            Home
           </span>
         </a>
 
