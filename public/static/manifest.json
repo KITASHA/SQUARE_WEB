@@ -7,9 +7,16 @@
   "theme_color": "#3f454b",
   "icons": [
     {
-      "src": "/static/images/common/square-logo.png",
+      "src": "/static/icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
