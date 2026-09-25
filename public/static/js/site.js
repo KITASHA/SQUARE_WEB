@@ -132,15 +132,7 @@ function footerMarkup() {
 
       <div class="sq-footer-inner">
 
-        <a
-          class="sq-footer-brand"
-          href="/"
-          aria-label="SQUARE ホーム"
-        >
-          <small>
-            岡山アカペラサークル SQUARE
-          </small>
-        </a>
+        <p class="sq-footer-contact">お問い合わせはX・InstagramのDMへ</p>
 
         <div class="sq-footer-social">
 
@@ -173,8 +165,10 @@ function footerMarkup() {
 
         </div>
 
-        <p class="sq-footer-contact">お問い合わせはX・InstagramのDMへ</p>
-        <p class="sq-footer-copy">© SQUARE</p>
+        <p class="sq-footer-copy">© Okayama A Cappella Circle</p>
+        <a class="sq-footer-brand" href="/" aria-label="SQUARE ホーム">
+          <strong>SQUARE</strong>
+        </a>
 
       </div>
 
