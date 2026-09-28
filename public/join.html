@@ -7,36 +7,123 @@
   <title>入会について | 岡山アカペラサークルSQUARE</title>
   <link rel="stylesheet" href="/static/css/style.css">
   <script src="/static/js/site.js" defer></script>
+
   <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png?v=2">
   <link rel="icon" type="image/x-icon" href="/static/icons/favicon.ico?v=2" sizes="16x16 32x32 48x48">
   <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32.png?v=2">
   <link rel="icon" type="image/png" sizes="48x48" href="/static/icons/favicon-48.png?v=2">
   <link rel="manifest" href="/static/manifest.json">
+
   <meta name="theme-color" content="#3f454b">
 </head>
+
 <body>
   <div data-site-header></div>
+
   <main class="sq-page-main">
     <h1 class="sq-page-title">入会について</h1>
+
+    <!-- =====================================================
+         新規入会停止中のお知らせ
+         再開時はこのsectionをコメントアウトまたは削除
+    ====================================================== -->
+    <section class="sq-admission-notice" aria-labelledby="admission-notice-title">
+      <h2 id="admission-notice-title">
+        現在、新規入会の受付を一時停止しています
+      </h2>
+
+      <p>
+        再開時期は未定です。<br>
+        再開後の入会方法について引き続き掲載しています。
+      </p>
+    </section>
+
+
     <section class="sq-simple-section">
       <h2>入会までの流れ</h2>
+
       <ol class="sq-flow">
-        <li>見学・体験申し込みフォームに回答。<br>見学は無料、体験500円です。（原則一回限り）<br><span class="sq-note">※締め切り：開催日の1ヶ月前まで<br>※時間と場所は変更になる場合があります</span></li>
-        <li>対象の日が近づいたらこちらから連絡いたします。</li>
-        <li>実際のサークルの雰囲気を感じていただく。<br><span class="sq-note">予め各種資料や当ウェブサイトを確認頂きますとスムーズです。</span></li>
-        <li>各種資料を確認。（下記のリンクから確認できます）</li>
-        <li>入会フォームを別途案内するので回答して入会。</li>
+        <li>
+          見学・体験申し込みフォームに回答。<br>
+          見学は無料、体験500円です。（原則一回限り）<br>
+          <span class="sq-note">
+            ※締め切り：開催日の1ヶ月前まで<br>
+            ※時間と場所は変更になる場合があります
+          </span>
+        </li>
+
+        <li>
+          対象の日が近づいたらこちらから連絡いたします。
+        </li>
+
+        <li>
+          実際のサークルの雰囲気を感じていただく。<br>
+          <span class="sq-note">
+            予め各種資料や当ウェブサイトを確認頂きますとスムーズです。
+          </span>
+        </li>
+
+        <li>
+          各種資料を確認。（下記のリンクから確認できます）
+        </li>
+
+        <li>
+          入会フォームを別途案内するので回答して入会。
+        </li>
       </ol>
     </section>
+
+
     <section class="sq-simple-section">
       <h2>各種資料・フォーム</h2>
-      <p>こちらの資料や当ウェブサイトでSQUAREの事をより知って頂ければ幸いです。<br>その他気になることはお気軽にお問い合わせください。<br>入会フォームに回答する前に規約を確認頂くようお願い致します。</p>
+
+      <p>
+        こちらの資料や当ウェブサイトでSQUAREの事をより知って頂ければ幸いです。<br>
+        その他気になることはお気軽にお問い合わせください。<br>
+        入会フォームに回答する前に規約を確認頂くようお願い致します。
+      </p>
+
       <div class="sq-actions">
-        <a class="sq-button" href="https://drive.google.com/drive/folders/1kGhrDxyw8riVsYW160JzmnE6qzg6LgPx?usp=sharing">確認資料一覧 <span aria-hidden="true">→</span></a>
-        <a class="sq-button is-outline" href="https://forms.gle/mYNAa8hgcQGmEATr6">体験・見学申し込みフォーム <span aria-hidden="true">→</span></a>
+        <a
+          class="sq-button"
+          href="https://drive.google.com/drive/folders/1kGhrDxyw8riVsYW160JzmnE6qzg6LgPx?usp=sharing"
+        >
+          確認資料一覧
+          <span aria-hidden="true">→</span>
+        </a>
+
+
+        <!-- =================================================
+             入会受付再開時はこちらを使用
+        ================================================== -->
+
+        <!--
+        <a
+          class="sq-button is-outline"
+          href="https://forms.gle/mYNAa8hgcQGmEATr6"
+        >
+          体験・見学申し込みフォーム
+          <span aria-hidden="true">→</span>
+        </a>
+        -->
+
+
+        <!-- =================================================
+             入会受付停止中
+             再開時はこちらを削除またはコメントアウト
+        ================================================== -->
+
+        <span
+          class="sq-button is-outline is-disabled"
+          aria-disabled="true"
+        >
+          体験・見学申し込みフォーム
+          <span class="sq-button-status">受付停止中</span>
+        </span>
       </div>
     </section>
   </main>
+
   <div data-site-footer></div>
 </body>
 </html>

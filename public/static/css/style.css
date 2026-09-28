@@ -2948,3 +2948,42 @@ a:not(.sq-button) {
       initial;
   }
 }
+
+
+/* =========================================================
+   JOIN / ADMISSION NOTICE
+========================================================= */
+
+.sq-admission-notice {
+  margin: 0 0 48px;
+  padding: 24px 28px;
+  border: 1px solid #d84a4a;
+  border-radius: 8px;
+  background: #fffafa;
+}
+
+.sq-admission-notice h2 {
+  margin: 0 0 10px;
+  color: #c62828;
+  font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.sq-admission-notice p {
+  margin: 0;
+  line-height: 1.8;
+}
+
+.sq-button.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+  user-select: none;
+}
+
+.sq-button-status {
+  margin-left: 10px;
+  font-size: 0.8em;
+  font-weight: 700;
+}
