@@ -167,7 +167,7 @@ function footerMarkup() {
 
         <p class="sq-footer-copy">© Okayama A Cappella Circle</p>
         <a class="sq-footer-brand" href="/" aria-label="SQUARE ホーム">
-          <strong>SQUARE</strong>
+          SQUARE
         </a>
 
       </div>
