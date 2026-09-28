@@ -30,8 +30,12 @@
         </p>
         <a class="sq-primary-button" href="/about"><span>SQUAREをもっと知る</span><span aria-hidden="true">→</span></a>
       </div>
-      <div class="sq-hero-visual">
-        <img src="/static/images/home/hero-01.jpg" alt="SQUAREのメンバー集合写真">
+      <div class="sq-hero-visual" data-slideshow role="region" aria-roledescription="カルーセル" aria-label="SQUAREの活動写真">
+        <div class="sq-hero-slides">
+          <img class="is-active" src="/static/images/home/hero-01.jpg" alt="SQUAREのメンバー集合写真" fetchpriority="high">
+          <img src="/static/images/home/hero-02.jpg" alt="定期活動会で歌うメンバー" aria-hidden="true" decoding="async">
+          <img src="/static/images/home/hero-03.jpg" alt="屋外に集まったSQUAREのメンバー" aria-hidden="true" decoding="async">
+        </div>
       </div>
     </section>
 

@@ -1065,6 +1065,35 @@ function escapeAttribute(
    PAGE INITIALIZATION
 ========================================================= */
 
+function initializeSlideshow() {
+  const root = document.querySelector('[data-slideshow]');
+  if (!root) return;
+  const slides = [...root.querySelectorAll('.sq-hero-slides > img')];
+  if (slides.length < 2) return;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let current = 0;
+  let timer;
+
+  function schedule() {
+    window.clearTimeout(timer);
+    if (!reducedMotion.matches && !document.hidden) {
+      timer = window.setTimeout(() => {
+        current = (current + 1) % slides.length;
+        slides.forEach((slide, i) => {
+          slide.classList.toggle('is-active', i === current);
+          slide.setAttribute('aria-hidden', String(i !== current));
+        });
+        schedule();
+      }, 5000);
+    }
+  }
+
+  document.addEventListener('visibilitychange', schedule);
+  reducedMotion.addEventListener('change', schedule);
+  schedule();
+}
+initializeSlideshow();
+
 if (document.getElementById('bands-list')) {
   loadBands();
 }
