@@ -1063,34 +1063,56 @@ function escapeAttribute(
    PAGE INITIALIZATION
 ========================================================= */
 
-function initializeSlideshow() {
-  const root = document.querySelector('[data-slideshow]');
-  if (!root) return;
-  const slides = [...root.querySelectorAll('.sq-hero-slides > img')];
-  if (slides.length < 2) return;
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let current = 0;
-  let timer;
+function initializeStageHero() {
+  const image = document.querySelector('[data-stage-hero]');
 
-  function schedule() {
-    window.clearTimeout(timer);
-    if (!reducedMotion.matches && !document.hidden) {
-      timer = window.setTimeout(() => {
-        current = (current + 1) % slides.length;
-        slides.forEach((slide, i) => {
-          slide.classList.toggle('is-active', i === current);
-          slide.setAttribute('aria-hidden', String(i !== current));
-        });
-        schedule();
-      }, 5000);
-    }
+  if (!image) {
+    return;
   }
 
-  document.addEventListener('visibilitychange', schedule);
-  reducedMotion.addEventListener('change', schedule);
-  schedule();
+  const candidates = [
+    '/static/images/stage/stage-01.png',
+    '/static/images/stage/stage-02.png',
+    '/static/images/stage/stage-03.png',
+    '/static/images/stage/stage-04.png'
+  ];
+
+  image.src = candidates[Math.floor(Math.random() * candidates.length)];
 }
-initializeSlideshow();
+
+initializeStageHero();
+
+function initializeSessionHero() {
+  const image = document.querySelector('[data-session-hero]');
+
+  if (!image) {
+    return;
+  }
+
+  const candidates = [
+    '/static/images/session/session-01.jpg',
+    '/static/images/session/session-02.jpg'
+  ];
+
+  let nextIndex;
+
+  try {
+    const previousIndex = Number.parseInt(
+      window.localStorage.getItem('square-session-hero-index') || '-1',
+      10
+    );
+    nextIndex = Number.isInteger(previousIndex)
+      ? (previousIndex + 1) % candidates.length
+      : 0;
+    window.localStorage.setItem('square-session-hero-index', String(nextIndex));
+  } catch {
+    nextIndex = Math.floor(Math.random() * candidates.length);
+  }
+
+  image.src = candidates[nextIndex];
+}
+
+initializeSessionHero();
 
 if (document.getElementById('bands-list')) {
   loadBands();
