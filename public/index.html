@@ -17,25 +17,19 @@
 <body class="square-home">
   <div data-site-header></div>
   <main>
-    <section class="sq-hero">
+    <section class="sq-hero" aria-labelledby="hero-title">
+      <div class="sq-hero-visual">
+        <img src="/static/images/home/hero-01.jpg" alt="SQUAREのメンバー集合写真" width="1125" height="750" fetchpriority="high">
+      </div>
       <div class="sq-hero-copy">
         <p class="sq-eyebrow">Okayama A Cappella Circle</p>
-        <h1>SQUARE</h1>
-        <div class="sq-short-line" aria-hidden="true"></div>
+        <h1 id="hero-title">SQUARE</h1>
         <p class="sq-lead">
-          「誰でも入れるアカペラサークル」をコンセプトとして<br class="desktop-only">
-          アカペラを始めたい人が集まってくる<br class="desktop-only">
+          「誰でも入れるアカペラサークル」を<span class="sq-hero-concept-end">コンセプトとして</span><br>
+          アカペラを始めたい人が集まってくる<br>
           広場のようなサークルです<br>
-          初心者・経験者問わず、とにかくだれもが気軽にアカペラを楽しめます
+          <span class="sq-hero-welcome">初心者・経験者問わず、とにかくだれもが気軽にアカペラを楽しめます</span>
         </p>
-        <a class="sq-primary-button" href="/about"><span>SQUAREをもっと知る</span><span aria-hidden="true">→</span></a>
-      </div>
-      <div class="sq-hero-visual" data-slideshow role="region" aria-roledescription="カルーセル" aria-label="SQUAREの活動写真">
-        <div class="sq-hero-slides">
-          <img class="is-active" src="/static/images/home/hero-01.jpg" alt="SQUAREのメンバー集合写真" fetchpriority="high">
-          <img src="/static/images/home/hero-02.jpg" alt="定期活動会で歌うメンバー" aria-hidden="true" decoding="async">
-          <img src="/static/images/home/hero-03.jpg" alt="屋外に集まったSQUAREのメンバー" aria-hidden="true" decoding="async">
-        </div>
       </div>
     </section>
 
