@@ -1114,6 +1114,76 @@ function initializeSessionHero() {
 
 initializeSessionHero();
 
+async function initializeBandsCard() {
+  const image = document.querySelector('[data-bands-card]');
+
+  if (!image) {
+    return;
+  }
+
+  try {
+    const bands = await fetchBands();
+    const imageUrls = bands
+      .map(band => band.imageUrl)
+      .filter(url => typeof url === 'string' && (url.startsWith('/') || /^https?:\/\//.test(url)));
+
+    if (imageUrls.length > 0) {
+      image.src = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+    }
+  } catch {
+    // Keep the static fallback image when the band API is unavailable.
+  }
+}
+
+initializeBandsCard();
+
+function initializeJoinCards() {
+  const images = document.querySelectorAll('[data-join-card]');
+
+  if (images.length === 0 || Math.random() >= 0.9) {
+    return;
+  }
+
+  images.forEach(image => {
+    image.src = '/static/images/home/card-join-feature.jpg';
+  });
+}
+
+initializeJoinCards();
+
+function initializeStageCards() {
+  const images = document.querySelectorAll('[data-stage-card]');
+
+  if (images.length === 0) {
+    return;
+  }
+
+  const candidates = [
+    '/static/images/home/card-stage.jpg',
+    '/static/images/common/card-stage.jpg'
+  ];
+  let nextIndex;
+
+  try {
+    const previousIndex = Number.parseInt(
+      window.localStorage.getItem('square-stage-card-index') || '-1',
+      10
+    );
+    nextIndex = Number.isInteger(previousIndex)
+      ? (previousIndex + 1) % candidates.length
+      : 0;
+    window.localStorage.setItem('square-stage-card-index', String(nextIndex));
+  } catch {
+    nextIndex = Math.floor(Math.random() * candidates.length);
+  }
+
+  images.forEach(image => {
+    image.src = candidates[nextIndex];
+  });
+}
+
+initializeStageCards();
+
 if (document.getElementById('bands-list')) {
   loadBands();
 }
