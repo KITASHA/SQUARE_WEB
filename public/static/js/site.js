@@ -519,7 +519,7 @@ function createBandCard(
 
   const image =
     band.imageUrl &&
-    safeExternalUrl(
+    safeBandImageUrl(
       band.imageUrl
     )
       ? `
@@ -720,7 +720,7 @@ function createBandDetail(
 
   const image =
     band.imageUrl &&
-    safeExternalUrl(
+    safeBandImageUrl(
       band.imageUrl
     )
       ? `
@@ -991,7 +991,7 @@ function safeExternalUrl(
     ).trim();
 
 
-  if (!text) {
+  if (!/^https?:\/\//i.test(text)) {
     return false;
   }
 
@@ -1000,8 +1000,7 @@ function safeExternalUrl(
 
     const url =
       new URL(
-        text,
-        window.location.origin
+        text
       );
 
 
@@ -1015,6 +1014,28 @@ function safeExternalUrl(
 
   } catch {
 
+    return false;
+  }
+}
+
+
+function safeBandImageUrl(value) {
+  const text = String(value || '').trim();
+
+  if (safeExternalUrl(text)) {
+    return true;
+  }
+
+  // R2 images may use a same-site path instead of an absolute URL.
+  if (!text.startsWith('/media/bands/')) {
+    return false;
+  }
+
+  try {
+    const url = new URL(text, window.location.origin);
+    return url.origin === window.location.origin &&
+      url.pathname.startsWith('/media/bands/');
+  } catch {
     return false;
   }
 }
@@ -1071,10 +1092,10 @@ function initializeStageHero() {
   }
 
   const candidates = [
-    '/static/images/stage/stage-01.png',
-    '/static/images/stage/stage-02.png',
-    '/static/images/stage/stage-03.png',
-    '/static/images/stage/stage-04.png'
+    '/static/images/stage/stage-01.webp',
+    '/static/images/stage/stage-02.webp',
+    '/static/images/stage/stage-03.webp',
+    '/static/images/stage/stage-04.webp'
   ];
 
   image.src = candidates[Math.floor(Math.random() * candidates.length)];
@@ -1090,8 +1111,8 @@ function initializeSessionHero() {
   }
 
   const candidates = [
-    '/static/images/session/session-01.jpg',
-    '/static/images/session/session-02.jpg'
+    '/static/images/session/session-01.webp',
+    '/static/images/session/session-02.webp'
   ];
 
   let nextIndex;
@@ -1125,7 +1146,7 @@ async function initializeBandsCard() {
     const bands = await fetchBands();
     const imageUrls = bands
       .map(band => band.imageUrl)
-      .filter(url => typeof url === 'string' && (url.startsWith('/') || /^https?:\/\//.test(url)));
+      .filter(safeBandImageUrl);
 
     if (imageUrls.length > 0) {
       image.src = imageUrls[Math.floor(Math.random() * imageUrls.length)];
@@ -1145,7 +1166,7 @@ function initializeJoinCards() {
   }
 
   images.forEach(image => {
-    image.src = '/static/images/home/card-join-feature.jpg';
+    image.src = '/static/images/home/card-join-feature.webp';
   });
 }
 
@@ -1159,8 +1180,8 @@ function initializeStageCards() {
   }
 
   const candidates = [
-    '/static/images/home/card-stage.jpg',
-    '/static/images/common/card-stage.jpg'
+    '/static/images/home/card-stage.webp',
+    '/static/images/common/card-stage.webp'
   ];
   let nextIndex;
 
