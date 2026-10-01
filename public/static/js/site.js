@@ -651,7 +651,7 @@ async function loadBandDetail() {
     if (band.name) {
 
       document.title =
-        `${band.name} | Okayama A Cappella Circle SQUARE`;
+        `${band.name} | 岡山アカペラサークルSQUARE`;
     }
 
 
@@ -921,17 +921,13 @@ function createBandLinks(
             'その他リンク',
 
           url:
-            String(
-              link?.url ||
-              ''
-            ).trim()
+            normalizeExternalUrl(
+              link?.url
+            )
         })
       )
       .filter(
-        link =>
-          safeExternalUrl(
-            link.url
-          )
+        link => link.url
       );
 
 
@@ -1037,6 +1033,50 @@ function safeBandImageUrl(value) {
       url.pathname.startsWith('/media/bands/');
   } catch {
     return false;
+  }
+}
+
+
+function normalizeExternalUrl(value) {
+  const input = String(value || '');
+
+  if (/\p{Cc}/u.test(input)) {
+    return '';
+  }
+
+  const text = input.trim();
+
+  // Reject ambiguous separators and control characters before URL parsing.
+  if (!text || /[\s\\]/u.test(text)) {
+    return '';
+  }
+
+  const hasHttpScheme = /^https?:\/\//i.test(text);
+
+  if (!hasHttpScheme && /^[/.?#]/.test(text)) {
+    return '';
+  }
+
+  try {
+    const url = new URL(hasHttpScheme ? text : `https://${text}`);
+
+    if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) {
+      return '';
+    }
+
+    if (!hasHttpScheme) {
+      // Add HTTPS only to a domain name, never to a site-relative path.
+      const labels = url.hostname.split('.');
+      const validLabel = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/i;
+      if (labels.length < 2 || !labels.every(label => validLabel.test(label)) ||
+          !/^[a-z]/i.test(labels.at(-1))) {
+        return '';
+      }
+    }
+
+    return url.href;
+  } catch {
+    return '';
   }
 }
 
