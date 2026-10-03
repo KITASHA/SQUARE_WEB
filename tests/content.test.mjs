@@ -22,7 +22,7 @@ for (const [path, phrase] of pages) {
     const html = readFileSync(resolve(root, path), 'utf8');
     assert.match(html, new RegExp(phrase));
     assert.match(html, /\/static\/css\/style\.css/);
-    assert.match(html, /\/static\/js\/site\.js/);
+    assert.match(html, /<script type="module" src="\/static\/js\/site\.js">/);
     assert.match(html, /data-site-header/);
     assert.match(html, /data-site-footer/);
     assert.doesNotMatch(html, /bootstrap|legacy\.css|theme\.css|(?:src|href)="\/images\//i);
@@ -111,7 +111,9 @@ test('palette is centralized in CSS variables', () => {
 });
 
 test('browser script uses the new page URLs', () => {
-  const js = readFileSync(resolve(root, 'public/static/js/site.js'), 'utf8');
+  const js = ['site', 'layout', 'bands', 'photos', 'analytics']
+    .map(name => readFileSync(resolve(root, `public/static/js/${name}.js`), 'utf8'))
+    .join('\n');
 
   assert.match(js, /href="\/about"/);
   assert.match(js, /href="\/bands"/);

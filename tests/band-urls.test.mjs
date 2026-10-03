@@ -1,14 +1,18 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import test from 'node:test';
-import { runInNewContext } from 'node:vm';
+import test, { afterEach } from 'node:test';
+import * as bands from '../public/static/js/bands.js';
 
-const source = readFileSync(new URL('../public/static/js/site.js', import.meta.url), 'utf8');
+const originalFetch = globalThis.fetch;
+afterEach(() => {
+  delete globalThis.window;
+  delete globalThis.document;
+  globalThis.fetch = originalFetch;
+});
 
 function loadSiteScript() {
   const context = {
-    URL,
-    URLSearchParams,
+    ...bands,
+    set fetch(value) { globalThis.fetch = value; },
     window: { location: new URL('https://square.example/') },
     document: {
       querySelectorAll: () => [],
@@ -16,7 +20,8 @@ function loadSiteScript() {
       getElementById: () => null
     }
   };
-  runInNewContext(source, context, { filename: 'site.js' });
+  globalThis.window = context.window;
+  globalThis.document = context.document;
   return context;
 }
 

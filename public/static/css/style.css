@@ -1904,65 +1904,23 @@ a:not(.sq-button) {
 ========================================================= */
 
 .band-detail-members {
-  display:
-    flex;
-
-  flex-wrap:
-    wrap;
-
-  gap:
-    8px 22px;
-
-  margin:
-    0;
-
-  padding:
-    0;
-
-  list-style:
-    none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .band-detail-members li {
-  position:
-    relative;
-
-  padding-left:
-    13px;
-
-  font-size:
-    15px;
-
-  line-height:
-    1.8;
+  font-size: 15px;
+  line-height: 1.8;
 }
 
-.band-detail-members li::before {
-  content:
-    "";
-
-  position:
-    absolute;
-
-  left:
-    0;
-
-  top:
-    .86em;
-
-  width:
-    4px;
-
-  height:
-    4px;
-
-  border-radius:
-    50%;
-
-  background:
-    var(--sq-accent);
+.band-detail-members li:not(:last-child)::after {
+  content: "/";
+  margin: 0 .5em;
 }
-
 
 /* =========================================================
    BAND DESCRIPTION
@@ -2774,7 +2732,7 @@ a:not(.sq-button) {
 
   .band-detail-members {
     gap:
-      5px 18px;
+      5px 0;
   }
 
   .band-detail-members li {
