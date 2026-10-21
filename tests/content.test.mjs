@@ -11,6 +11,7 @@ const pages = [
   ['public/about.html', 'SQUAREについて'],
   ['public/session.html', '定期活動会'],
   ['public/stage.html', 'Okayama Music SQUARE'],
+  ['public/live.html', 'サークルライブについて'],
   ['public/bands.html', 'バンド一覧'],
   ['public/band.html', 'バンド紹介'],
   ['public/join.html', '入会について'],
@@ -36,6 +37,7 @@ test('home links to the current primary destinations', () => {
     ['/about', 'SQUAREについて'],
     ['/session', '定期活動会'],
     ['/stage', 'Okayama Music SQUARE'],
+    ['/live', 'サークルライブについて'],
     ['/bands', 'バンド紹介'],
     ['/join', '入会について'],
     ['https://www.youtube.com/channel/UCpcjVaT57zyOhB92BROiTBA', '活動の様子を動画で見る']
@@ -75,6 +77,7 @@ test('public HTML files are flat and legacy homes directory is gone', () => {
     'bands.html',
     'index.html',
     'join.html',
+    'live.html',
     'session.html',
     'stage.html'
   ]);
